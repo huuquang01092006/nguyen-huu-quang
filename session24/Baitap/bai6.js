@@ -1,5 +1,5 @@
 let str = "";
-let choice;
+let choice = 0;
 do {
     choice = parseInt(prompt("Nhập lựa chọn của bạn: "));
     switch (choice) {
@@ -37,7 +37,7 @@ do {
             let words = str.split(" ");
             let newStr = "";
             for (let i = 0; i < words.length; i++) {
-                if (words[i].length > 0) {
+                if (!words[i] == " ") {
                     newStr += words[i][0].toUpperCase() + words[i].slice(1) + " ";
                 }
             }
@@ -45,5 +45,6 @@ do {
             break;
         default:
             console.log("Lựa chọn không hợp lệ, vui lòng nhập lại.");
+            break;
     }
 } while (choice !== 7);
