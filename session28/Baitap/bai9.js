@@ -43,7 +43,7 @@ function updateIsAvailable() {
   }
 }
 function deleBook() {
-  let id = +prompt("nhập id sáchsách muốn xóa");
+  let id = +prompt("nhập id sách muốn xóa");
   let findIndex = listBook.findIndex((item) => item.id == id);
   if (findIndex != -1) {
     let confitmDelete = confirm("bạn có muốn xóa hay không?");
@@ -52,7 +52,7 @@ function deleBook() {
       console.log("xóa sách thành công!");
     }
   } else {
-    console.log("không tìm thấy sáchsách có id là: ", id);
+    console.log("không tìm thấy sách có id là: ", id);
   }
 }
 function sortBook() {
