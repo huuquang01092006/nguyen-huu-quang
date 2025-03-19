@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Đăng Nhập</title>
+</head>
+<body>
+    <h1>Đăng Nhập</h1>
+    <label for="username">Tên người dùng (Email):</label>
+    <input type="text" id="username" name="username"><br><br>
+    <label for="password">Mật khẩu:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <button id="loginButton">Đăng nhập</button>
+    <script>
+        const correctUsername = "huanrose@gmail.com";
+        const correctPassword = "123456";
+        document.getElementById("loginButton").addEventListener("click", function () {
+            const enteredUsername = document.getElementById("username").value;
+            const enteredPassword = document.getElementById("password").value;
+            if (enteredUsername === correctUsername && enteredPassword === correctPassword) {
+                console.log("Đăng nhập thành công!");
+            } else {
+                console.log("Đăng nhập thất bại. Vui lòng thử lại.");
+            }
+        });
+    </script>
+</body>
+</html>

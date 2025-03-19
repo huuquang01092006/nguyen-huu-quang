@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My To Do List</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+    }
+    .header {
+      background-color: #f44336;
+      padding: 30px 40px;
+      text-align: center;
+      color: #fff;
+      font-size: 40px;
+    }
+    .container {
+      background-color: #ffffff;
+      margin: 30px auto;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .input-section {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .input-section input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+    .input-section button.addBtn {
+      padding: 10px;
+      width: 50px;
+      background-color: #d9d9d9;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .input-section button.addBtn:hover {
+      background-color: #bbb;
+    }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    ul li {
+      position: relative;
+      padding: 12px 8px 12px 40px;
+      background-color: #eee;
+      font-size: 18px;
+      transition: background 0.2s ease;
+      margin-bottom: 2px;
+      cursor: pointer;
+    }
+    ul li.checked {
+      background-color: #888;
+      color: #fff;
+    }
+    .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 12px 16px;
+      background-color: #f44336;
+      color: #fff;
+      cursor: pointer;
+    }
+    .close:hover {
+      background-color: #dd2222;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    My To Do List
+  </div>
+  <div class="container">
+    <div class="input-section">
+      <input type="text" id="myInput" placeholder="Title..." value="binh">
+      <button class="addBtn" id="addBtn">Add</button>
+    </div>
+    <ul id="todoList">
+      <li>
+        Hit the gym
+        <span class="close">×</span>
+      </li>
+      <li class="checked">
+        Pay bills
+        <span class="close">×</span>
+      </li>
+      <li>
+        Meet George
+        <span class="close">×</span>
+      </li>
+      <li>
+        Buy eggs
+        <span class="close">×</span>
+      </li>
+      <li>
+        Read a book
+        <span class="close">×</span>
+      </li>
+      <li>
+        Organize office
+        <span class="close">×</span>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    function addToggleEvent(item) {
+      item.addEventListener("click", function(e) {
+        if (e.target.tagName === "SPAN") return;
+        item.classList.toggle("checked");
+      });
+    }
+    document.querySelectorAll("#todoList li").forEach(item => {
+      addToggleEvent(item);
+      let closeBtn = item.querySelector(".close");
+      closeBtn.addEventListener("click", function() {
+        item.remove();
+      });
+    });
+    document.getElementById("addBtn").addEventListener("click", function() {
+      let inputValue = document.getElementById("myInput").value.trim();
+      if (inputValue === "") {
+        alert("Bạn phải nhập ít nhất một ký tự!");
+        return;
+      }
+      let li = document.createElement("li");
+      li.textContent = inputValue;
+      let span = document.createElement("span");
+      span.textContent = "×";
+      span.className = "close";
+      li.appendChild(span);
+      addToggleEvent(li);
+      span.addEventListener("click", function(){
+        li.remove();
+      });
+      document.getElementById("todoList").appendChild(li);
+      document.getElementById("myInput").value = "";
+    });
+  </script>
+</body>
+</html>
