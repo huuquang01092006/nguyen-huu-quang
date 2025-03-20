@@ -5,18 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        table{
-            width: 1000px;
-            margin-left: 15%;
-        }
-        h1{
-            text-align: center;
-        }
+
     </style>
 </head>
 <body>
     <table border="1">
-        <h1>Danh Sach Nhanh Vien</h1>
         <thead>
             <tr>
                 <th>STT</th>
@@ -24,28 +17,42 @@
                 <th>AGE</th>
                 <th>ADDRESS</th>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>18</td>
-                <td>New York</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Mike</td>
-                <td>22</td>
-                <td>Canada</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Linda</td>
-                <td>19</td>
-                <td>California</td>
-            </tr>
-            
         </thead>
-        
+        <tbody id="tbody">
+        </tbody>
+      
     </table>
-    <script src="./bai5.js"></script>
+    <script>
+        const empoly  =[
+            {
+                id : 1,
+                name : "exam1",
+                age:"18",
+                address:"ha noi",
+            },
+            {
+                id : 2,
+                name : "exam3",
+                age:"18",
+                address:"ha hoi",
+            }
+        ];
+        function show (){
+            let str = "";
+            for(i=0;i<empoly.length;i++) {
+                str+=
+                `<tr>
+                    <td>${empoly[i].id}</td>
+                    <td>${empoly[i].name}</td>
+                    <td>${empoly[i].age}</td>
+                    <td>${empoly[i].address}</td>
+                </tr>`;
+                
+            }
+            document.getElementById("tbody").innerHTML=str;
+        }
+        show();
+    </script>
+    
 </body>
 </html>
