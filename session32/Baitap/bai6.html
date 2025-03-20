@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            background-color: #f7f7f7;
+            display: block;
+            justify-items: center;
+            height: 100px;
+        }
+        .container .button1{
+            height: 40px;
+            width: 40px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .container .button2{
+            height: 40px;
+            width: 40px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .container #text{
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="text">Chu se thay doi khi bam nut</h2>
+        <div class="content">
+            <button class="button1">+</button>
+            <button class="button2">-</button>
+        </div>
+    </div>
+    <script>
+        function reduceFontSize() {
+            let text = document.getElementById("text");
+            let currentSize = parseInt(text.style.fontSize || 16);
+            text.style.fontSize = (currentSize - 2) + "px";
+        }
+        function increaseFontSize() {
+            let text = document.getElementById("text");
+            let currentSize = parseInt(text.style.fontSize || 16);
+            text.style.fontSize = (currentSize + 2) + "px";
+        }
+        document.getElementsByClassName("button1")[0].addEventListener("click", ()=>{
+            increaseFontSize();
+        });
+        document.getElementsByClassName("button2")[0].addEventListener("click", ()=>{
+            reduceFontSize();
+        });
+    </script>
+</body>
+</html>

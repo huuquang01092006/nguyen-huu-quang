@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #f4f4f4;
+            padding: 10px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>To-Do List K24</h2>
+    <input type="text" id="taskInput" placeholder="Nhập công việc">
+    <button onclick="addTask()">Thêm</button>
+    <ul id="taskList"></ul>
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        window.onload = function () {
+            renderTasks();
+        };
+
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskValue = taskInput.value.trim();
+            if (taskValue === '') {
+                alert('Vui lòng nhập công việc!');
+                return;
+            }
+            tasks.push(taskValue);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            taskInput.value = ''; 
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = ''; 
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.textContent = task;
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Sửa';
+                editButton.onclick = function () {
+                    editTask(index);
+                };
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Xóa';
+                deleteButton.onclick = function () {
+                    deleteTask(index);
+                };
+                li.appendChild(editButton);
+                li.appendChild(deleteButton);
+
+                taskList.appendChild(li);
+            });
+        }
+
+        function editTask(index) {
+            const newTask = prompt('Chỉnh sửa công việc:', tasks[index]);
+            if (newTask !== null && newTask.trim() !== '') {
+                tasks[index] = newTask.trim();
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function deleteTask(index) {
+            if (confirm('Bạn có chắc chắn muốn xóa công việc này không?')) {
+                tasks.splice(index, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+    </script>
+</body>
+</html>

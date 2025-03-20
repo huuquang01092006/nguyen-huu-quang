@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            background-color: #F4F4F4;
+            display: block;
+            justify-items: center;
+            height: 300px;
+        }
+        .container .content{
+            background-color: white;
+            width: 500px;
+            height: 200px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .container input{
+            margin-top: 20px;
+            width: 200px;
+            height: 30px;
+            border-radius: 5px;
+        }
+        .container button{
+            background-color: #4aaf4e;
+            border: none;
+            color: white;
+            height: 34px;
+            border-radius: 5px;
+        }
+        .container .content .text{
+            margin-top: 20px;
+        }
+        .container .content .text p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 80px;
+            border-bottom: 1px solid gray;
+        }
+        .container .content .text button.close{
+            background-color: red;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            width: 25px;
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"> 
+        <h1>To-Do List K24_PTIT</h1>
+        <div class="content">
+            <input type="text" placeholder="Nhập nhiệm vụ...">
+            <button class="button1">Thêm</button>
+            <div class="text"></div>
+        </div>
+    </div>
+    <script>
+        let list = ["hoc dom js", "lam bai tap dom js"];
+
+        function renderItem() {
+            let textDiv = document.getElementsByClassName("text")[0];
+            textDiv.innerHTML = ""; 
+            for (let i = 0; i < list.length; i++) {
+                let p = document.createElement("p");
+                p.textContent = list[i];
+
+                let btnClose = document.createElement("button");
+                btnClose.textContent = "X";
+                btnClose.className = "close";
+
+                btnClose.addEventListener("click", () => {
+                    list.splice(i, 1); 
+                    renderItem(); 
+                });
+
+                p.appendChild(btnClose);
+
+                textDiv.appendChild(p);
+            }
+        }
+
+        document.getElementsByClassName("button1")[0].addEventListener("click", () => {
+            let input = document.getElementsByTagName("input")[0];
+            let value = input.value.trim();
+            if (value === "") {
+                console.log("Tên nhiệm vụ không được để trống!");
+            } else {
+                list.push(value); 
+                renderItem(); 
+                input.value = ""; 
+            }
+        });
+
+        renderItem(); 
+    </script>
+</body>
+</html>

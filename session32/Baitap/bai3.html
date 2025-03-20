@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" placeholder="nhap ten mon hoc">
+    <button>them mon hoc</button>
+    <ol>
+        
+    </ol>
+    <script>
+        let subject = ["toan", "ly", "hoa"];
+        function renderItem() {
+            let str="";
+            for (let i = 0; i < subject.length; i++) {
+                str += 
+                `
+                <li>${subject[i]}</li>
+                `
+                document.getElementsByTagName("ol")[0].innerHTML=str;
+            }
+        }
+        renderItem();
+        function addSubject() {
+            let value = document.getElementsByTagName("input")[0].value;
+            if (value ==="") {
+                console.log(`ten mon hoc khong duoc de trong`);
+            }else{
+                subject.push(value);
+                renderItem();
+            }
+        }
+        document.getElementsByTagName("button")[0].addEventListener("click", ()=>{
+            addSubject();
+            document.getElementsByTagName("input")[0].value="";
+        })
+    </script>
+</body>
+</html>

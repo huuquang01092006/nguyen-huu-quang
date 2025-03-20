@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>Bam vao toi</button>
+    <div class="content"></div>
+    <script>
+        let count = 0;
+        document.getElementsByTagName("button")[0].addEventListener("click", ()=>{
+            count += 1;
+            let str="";
+            str+=`<p>So lan bam: ${count}</p>`;
+            document.getElementsByClassName("content")[0].innerHTML=str;
+        });
+    </script>
+</body>
+</html>

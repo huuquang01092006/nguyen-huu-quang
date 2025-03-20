@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar</title>
+    <style>
+        #container{
+            opacity: 0.1;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+        }
+        .button1{
+            width: 200px;
+            height: 40px;
+            margin-right: 30px;
+            border: none;
+            background-color: blue;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Progress Bar with Background Effect</h1>
+ 
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <br>
+        <button onclick="tangTienTrinh()" class="button1">Tăng tiến trình</button>
+        <button onclick="giamTienTrinh()" class="button1">Giảm tiến trình</button>
+    </div>
+    
+
+    <script>
+        let progress = 0;
+        const progressBar = document.getElementById('progress-bar');
+
+        function tangTienTrinh() {
+            if (progress < 100) {
+                let text = document.getElementById("container");
+                let currentOpacity = parseFloat(text.style.opacity) || 0.1; 
+                text.style.opacity = Math.min(currentOpacity + 0.1, 1);
+                progress += 10;
+                capNhatTienTrinh();
+            }
+        }
+
+        function giamTienTrinh() {
+            if (progress > 0) {
+                let text = document.getElementById("container");
+                let currentOpacity = parseFloat(text.style.opacity) || 0.1; 
+                text.style.opacity = Math.min(currentOpacity - 0.1, 1);
+                progress -= 10; 
+                capNhatTienTrinh();
+            }
+        }
+
+        function capNhatTienTrinh() {
+            progressBar.style.width = progress + '%';
+        }
+    </script>
+</body>
+</html>

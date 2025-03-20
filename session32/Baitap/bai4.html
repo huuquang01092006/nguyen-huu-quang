@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        span{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" placeholder="nhap email"><br>
+    <span>email hop le!</span><br>
+    <button>check</button>
+    <script>
+        document.getElementsByTagName("button")[0].addEventListener("click", ()=>{
+           let value = document.getElementsByTagName("input")[0].value;
+           if(value.includes("@") && value.endsWith(".com") || value.endsWith(".vn")){
+                document.getElementsByTagName("span")[0].innerHTML="email hop le!";
+                document.getElementsByTagName("span")[0].style.display="block";
+                document.getElementsByTagName("span")[0].style.color="green"
+           }else{
+                document.getElementsByTagName("span")[0].innerHTML="email khong hop le!";
+                document.getElementsByTagName("span")[0].style.display="block";
+                document.getElementsByTagName("span")[0].style.color="red";
+           }
+        });
+    </script>
+</body>
+</html>
