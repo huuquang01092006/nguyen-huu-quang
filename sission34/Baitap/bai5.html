@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách nhân viên Rikkei</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    input[type="text"] {
+      width: calc(50% - 20px);
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Danh sách nhân viên Rikkei</h2>
+    <div>
+      <input type="text" id="nameEmployee" placeholder="Tên nhân viên">
+      <input type="text" id="jobEmployee" placeholder="Chức vụ">
+      <button id="addEmployeeBtn">Thêm nhân viên</button>
+    </div>
+    <table id="employeeTable">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên nhân viên</th>
+          <th>Chức vụ</th>
+        </tr>
+      </thead>
+      <tbody id="employeeTbody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    let employees = JSON.parse(localStorage.getItem("employees")) || [
+      { name: "Nguyễn Văn A", job: "Developer" },
+      { name: "Trần Thị B", job: "Designer" },
+      { name: "Phạm Văn C", job: "Project Manager" }
+    ];
+
+    function updateStorage() {
+      localStorage.setItem("employees", JSON.stringify(employees));
+      renderEmployees();
+    }
+
+    function renderEmployees() {
+      const tbody = document.getElementById("employeeTbody");
+      tbody.innerHTML = "";  
+      employees.forEach((employee, index) => {
+        const row = document.createElement("tr");
+
+        const cellIndex = document.createElement("td");
+        cellIndex.textContent = index + 1;
+
+        const cellName = document.createElement("td");
+        cellName.textContent = employee.name;
+
+        const cellJob = document.createElement("td");
+        cellJob.textContent = employee.job;
+
+        row.appendChild(cellIndex);
+        row.appendChild(cellName);
+        row.appendChild(cellJob);
+        tbody.appendChild(row);
+      });
+    }
+
+    document.getElementById("addEmployeeBtn").addEventListener("click", function() {
+      const nameInput = document.getElementById("nameEmployee").value.trim();
+      const jobInput = document.getElementById("jobEmployee").value.trim();
+      
+      if (nameInput === "" || jobInput === "") {
+        alert("Vui lòng nhập đầy đủ tên nhân viên và chức vụ!");
+        return;
+      }
+
+      employees.push({ name: nameInput, job: jobInput });
+      
+      updateStorage();
+      
+      document.getElementById("nameEmployee").value = "";
+      document.getElementById("jobEmployee").value = "";
+    });
+
+    renderEmployees();
+  </script>
+</body>
+</html>

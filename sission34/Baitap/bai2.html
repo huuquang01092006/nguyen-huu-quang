@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 { text-align: center; }
+        .form-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        input, select, button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .task-table { width: 100%; border-collapse: collapse; }
+        .task-table th, .task-table td {
+            padding: 10px; border-bottom: 1px solid #ddd; text-align: center;
+        }
+        .task-table tr:hover { background: #f9f9f9; }
+        .edit-btn { background: #28a745; color: white; }
+        .delete-btn { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Task Management</h2>
+        <div class="form-group">
+            <input type="text" id="content" placeholder="Task Content">
+            <input type="date" id="dueDate">
+            <select id="status">
+                <option value="pending">Pending</option>
+                <option value="solving">Solving</option>
+                <option value="completed">Completed</option>
+            </select>
+            <input type="text" id="username" placeholder="Assigned To">
+            <button id="submitBtn">Submit</button>
+        </div>
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Content</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="taskBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        let editIndex = null;
+
+        function renderTasks() {
+            let taskBody = document.getElementById("taskBody");
+            taskBody.innerHTML = "";
+            tasks.forEach((task, index) => {
+                let row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${task.content}</td>
+                        <td>${task.dueDate}</td>
+                        <td>${task.status}</td>
+                        <td>${task.assignedTo}</td>
+                        <td>
+                            <button class="edit-btn" onclick="editTask(${index})">Edit</button>
+                            <button class="delete-btn" onclick="deleteTask(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                taskBody.innerHTML += row;
+            });
+        }
+
+        function addOrUpdateTask() {
+            let content = document.getElementById("content").value;
+            let dueDate = document.getElementById("dueDate").value;
+            let status = document.getElementById("status").value;
+            let assignedTo = document.getElementById("username").value;
+            
+            if (!content || !dueDate || !assignedTo) {
+                alert("Please fill in all fields");
+                return;
+            }
+
+            let newTask = { content, dueDate, status, assignedTo };
+            
+            if (editIndex !== null) {
+                tasks[editIndex] = newTask;
+                editIndex = null;
+                document.getElementById("submitBtn").innerText = "Submit";
+            } else {
+                tasks.push(newTask);
+            }
+            
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+            clearForm();
+        }
+
+        function editTask(index) {
+            let task = tasks[index];
+            document.getElementById("content").value = task.content;
+            document.getElementById("dueDate").value = task.dueDate;
+            document.getElementById("status").value = task.status;
+            document.getElementById("username").value = task.assignedTo;
+            
+            editIndex = index;
+            document.getElementById("submitBtn").innerText = "Update";
+        }
+
+        function deleteTask(index) {
+            if (confirm("Are you sure you want to delete this task?")) {
+                tasks.splice(index, 1);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById("content").value = "";
+            document.getElementById("dueDate").value = "";
+            document.getElementById("status").value = "pending";
+            document.getElementById("username").value = "";
+        }
+
+        document.getElementById("submitBtn").addEventListener("click", addOrUpdateTask);
+
+        renderTasks();
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 8px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Đăng nhập</h2>
+    <form id="loginForm">
+      <input type="text" id="email" placeholder="Nhập email của bạn">
+      <input type="password" id="password" placeholder="Nhập password">
+      <button type="submit">Login</button>
+    </form>
+    <p>
+      <a href="forgot.html">Quên mật khẩu?</a> |
+      <a href="signup.html">Đăng ký</a>
+    </p>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const emailInput = document.getElementById("email").value.trim();
+      const passwordInput = document.getElementById("password").value;
+
+      if (emailInput === "") {
+        alert("Email không được bỏ trống!");
+        return;
+      }
+
+      const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+      const user = registeredUsers.find(user => user.email === emailInput);
+
+      if (!user) {
+        alert("Email chưa được đăng ký!");
+        return;
+      }
+
+      if (user.password !== passwordInput) {
+        alert("Mật khẩu không chính xác!");
+        return;
+      }
+
+      alert("Đăng nhập thành công!");
+      
+    });
+  </script>
+</body>
+</html>
