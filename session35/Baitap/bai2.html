@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .title .button{
+            border: none;
+            background-color: #8851d5;
+            color: white;
+            width: 300px;
+            height: 50px;
+        }
+        .addBookMark{
+             display: none;
+        }
+        .bookMark{
+            display: flex;
+            margin-top: 40px;
+            width: 220px;
+            background-color: #8851d5;
+            color: white;
+            justify-content: space-between;
+        }
+        .bookMark .button{
+            border: none;
+            background-color: #8851d5;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .addBookMark .title1{
+            display: flex;
+            margin-top: 40px;
+            width: 220px;
+            height: 40px;
+            background-color: #8851d5;
+            color: white;
+            justify-content: space-between;
+        }
+        .addBookMark .title1 button{
+            border: none;
+            background-color: #8851d5;
+            color: white;
+            margin-bottom: 40px;
+
+        }
+        .form{
+            background-color: #f5f5f5;
+            width: 220px;
+            height: 200px;
+            
+        }
+        .form .content{
+            padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title" class="title">
+        <button class="button">ADD BOOLMARK</button>
+    </div>
+    <div id="bookMark">
+        
+    </div>
+    <div class="addBookMark">
+        <div class="title1">
+            <p>Add Bookmark</p>
+            <button id="button">X</button>
+        </div>
+        <form action="" class="form">
+            <div class="content">
+                <label for="">Website Name</label><br>
+                <input type="text" id="input1"><br>
+                <label for="">WebsiteUrl</label><br>
+                <input type="text" id="input2"><br>
+                <button id="save">Save</button>
+            </div>
+            
+        </form>
+    </div>
+    <script>
+        document.getElementById("title").addEventListener("click", ()=>{
+            document.getElementsByClassName("addBookMark")[0].style.display="block"
+        });
+        document.getElementById("button").addEventListener("click", ()=>{
+            document.getElementsByClassName("addBookMark")[0].style.display="none"
+        });
+        let listBookMark = JSON.parse(localStorage.getItem("listBookMark")) || [];
+        function renderBookMark() {
+            let str ="";
+            for (let i = 0; i < listBookMark.length; i++) {
+                str +=
+                `
+                <div class="bookMark">
+                    <p>${listBookMark[i].name}</p>
+                    <button class="button" onclick=deleJob(${i})>X</button>
+                </div>
+                `
+                document.getElementById("bookMark").innerHTML=str;
+            }
+        }
+        renderBookMark();
+        function addBookMark() {
+            let value1 = document.getElementById("input1").value;
+            let value2 = document.getElementById("input2").value;
+            if (value1.length == 0 || value2.length == 0) {
+                alert("vui lòng nhập dữ liệu");
+                return;
+            }
+            let id =0;
+            if (listBookMark.length == 0) {
+                id = 1;
+            } else {
+                id = listBookMark[listBookMark.length - 1].id + 1;
+            }
+            let bookMark ={
+                id:id,
+                name: value1,
+            }
+            document.getElementById("input1").value ="";
+            document.getElementById("input2").value ="";
+            listBookMark.push(bookMark);
+            localStorage.setItem("listBookMark", JSON.stringify(listBookMark));
+            renderBookMark();
+        }
+        document.getElementById("save").addEventListener("click", (e)=>{
+            e.preventDefault();
+            addBookMark();
+        });
+        function deleJob(index) {        
+            let deleConfirm=confirm("Bạn có muốn xóa công việc này ko")
+            if (deleConfirm) {
+                listBookMark.splice(index,1);
+                localStorage.setItem("listBookMark", JSON.stringify(listBookMark));
+                renderBookMark();
+                return
+            }
+        }
+    </script>
+</body>
+</html>

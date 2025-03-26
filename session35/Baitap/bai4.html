@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách nhân viên Rikkei</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .pagination {
+            margin-top: 10px;
+        }
+        .pagination button {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+        }
+        .active {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Danh sách nhân viên Rikkei</h2>
+    <input type="text" id="nameInput" placeholder="tên nhân viên">
+    <input type="text" id="roleInput" placeholder="chức vụ">
+    <button onclick="addEmployee()">thêm nhân viên</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên</th>
+                <th>Chức vụ</th>
+            </tr>
+        </thead>
+        <tbody id="employeeTable"></tbody>
+    </table>
+
+    <div class="pagination">
+        <button onclick="prevPage()">Previous</button>
+        <span id="pageNumbers"></span>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    <script>
+        let employees = JSON.parse(localStorage.getItem('employees')) || [];
+
+        let currentPage = 1;
+        const itemsPerPage = 3;
+
+        function saveToLocalStorage() {
+            localStorage.setItem('employees', JSON.stringify(employees));
+        }
+
+        function displayEmployees() {
+            let table = document.getElementById("employeeTable");
+            table.innerHTML = "";
+
+            let start = (currentPage - 1) * itemsPerPage;
+            let end = start + itemsPerPage;
+            let paginatedEmployees = employees.slice(start, end);
+
+            paginatedEmployees.forEach((emp, index) => {
+                let row = `<tr>
+                    <td>${start + index + 1}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.role}</td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+
+            displayPagination();
+        }
+
+        function displayPagination() {
+            let pageNumbers = document.getElementById("pageNumbers");
+            pageNumbers.innerHTML = "";
+
+            let totalPages = Math.ceil(employees.length / itemsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                let btn = `<button class="${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                pageNumbers.innerHTML += btn;
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayEmployees();
+            }
+        }
+
+        function nextPage() {
+            let totalPages = Math.ceil(employees.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayEmployees();
+            }
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            displayEmployees();
+        }
+
+        function addEmployee() {
+            let name = document.getElementById("nameInput").value;
+            let role = document.getElementById("roleInput").value;
+
+            if (name && role) {
+                employees.push({ name, role });
+                saveToLocalStorage();
+                document.getElementById("nameInput").value = "";
+                document.getElementById("roleInput").value = "";
+                displayEmployees();
+            } else {
+                alert("Vui lòng nhập đủ thông tin!");
+            }
+        }
+
+        displayEmployees();
+    </script>
+</body>
+</html>

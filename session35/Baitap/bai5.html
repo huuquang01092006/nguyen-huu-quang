@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản Lý Danh Mục</title>
+  <style>
+    .container{
+        display: none;
+    }
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      color: #333;
+    }
+    form {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #555;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+    button[type="button"] {
+      background-color: #e74c3c;
+      color: #fff;
+      margin-left: 10px;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+    }
+    .controls input[type="text"] {
+      width: 200px;
+      padding: 8px;
+      margin-right: 10px;
+    }
+    .controls select {
+      width: 180px;
+      padding: 8px;
+    }
+    .controls .add{
+        margin-left: 40px;
+        background-color: blue;
+        color: white;
+        border: 1px solid black;
+        width: 200px;
+        height: 35px;
+        border-radius: 2px;
+        text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f9f9f9;
+    }
+    .deleteBtn {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Tìm kiếm danh mục...">
+    <select id="statusFilter">
+      <option value="all">Tất cả</option>
+      <option value="active">Đang hoạt động</option>
+      <option value="inactive">Ngưng hoạt động</option>
+    </select>
+    <div class="add" id="add">Thêm Danh Mục</div>
+  </div>
+  <div class="container" id="container">
+        <h2>Thêm mới danh mục</h2>
+        <form id="categoryForm">
+            <label for="code">Mã danh mục:</label>
+            <input type="text" id="code" placeholder="Nhập mã danh mục">
+            <div id="codeError" class="error"></div>
+
+            <label for="name">Tên danh mục:</label>
+            <input type="text" id="name" placeholder="Nhập tên danh mục">
+            <div id="nameError" class="error"></div>
+
+            <label for="status">Trạng thái:</label>
+            <select id="status">
+            <option value="active">Đang hoạt động</option>
+            <option value="inactive">Ngưng hoạt động</option>
+            </select>
+
+            <div style="text-align: right;">
+            <button type="button" id="cancelButton">Hủy</button>
+            <button type="submit" id="submit">Thêm</button>
+            </div>
+        </form>
+  </div>
+  <h2>Danh sách danh mục</h2>
+  <table id="categoryTable">
+    <thead>
+      <tr>
+        <th>Mã danh mục</th>
+        <th>Tên danh mục</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script>
+    document.getElementById("add").addEventListener("click", ()=>{
+        document.getElementById("container").style.display="block";
+    });
+    document.getElementById("cancelButton").addEventListener("click", ()=>{
+        document.getElementById("container").style.display="none";
+    });
+    
+    function clearErrors() {
+      document.getElementById('codeError').textContent = '';
+      document.getElementById('nameError').textContent = '';
+    }
+
+    function addCategoryRow(category) {
+      const tbody = document.querySelector('#categoryTable tbody');
+      const row = document.createElement('tr');
+
+      const cellCode = document.createElement('td');
+      cellCode.textContent = category.code;
+      row.appendChild(cellCode);
+
+      const cellName = document.createElement('td');
+      cellName.textContent = category.name;
+      row.appendChild(cellName);
+
+      const cellStatus = document.createElement('td');
+      cellStatus.textContent = category.status === 'active' ? 'Đang hoạt động' : 'Ngưng hoạt động';
+      row.appendChild(cellStatus);
+
+      const cellAction = document.createElement('td');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Xóa';
+      deleteBtn.className = 'deleteBtn';
+      deleteBtn.addEventListener('click', function() {
+        removeCategory(category.code);
+      });
+      cellAction.appendChild(deleteBtn);
+      row.appendChild(cellAction);
+
+      tbody.appendChild(row);
+    }
+
+    function saveCategory(category) {
+      let categories = JSON.parse(localStorage.getItem('categories')) || [];
+      categories.push(category);
+      localStorage.setItem('categories', JSON.stringify(categories));
+    }
+    
+    
+
+    document.getElementById('categoryForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      clearErrors();
+
+      const code = document.getElementById('code').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const status = document.getElementById('status').value;
+
+      let isValid = true;
+      if (!code) {
+        document.getElementById('codeError').textContent = 'Mã danh mục không được để trống';
+        isValid = false;
+      }
+      if (!name) {
+        document.getElementById('nameError').textContent = 'Tên danh mục không được để trống';
+        isValid = false;
+      }
+      if (!isValid) return;
+
+      const newCategory = { code, name, status };
+      saveCategory(newCategory);
+      filterAndRender();
+      this.reset();
+    });
+
+    document.getElementById('cancelButton').addEventListener('click', function() {
+      document.getElementById('categoryForm').reset();
+      clearErrors();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', filterAndRender);
+
+    document.getElementById('statusFilter').addEventListener('change', filterAndRender);
+
+    window.addEventListener('load', filterAndRender);
+  </script>
+</body>
+</html>

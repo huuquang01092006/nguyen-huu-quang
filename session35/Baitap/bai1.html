@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .taskList {
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            background-color: #f4f4f4;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <input type="text" id="taskInput" placeholder="Nhap cong viec">
+        <button id="addTaskButton">Them</button>
+        <div id="list">
+            <div id="taskList">
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        let toDoList = JSON.parse(localStorage.getItem("list")) || [];
+        function renderList() {
+            let str ="";
+            for (let i = 0; i < toDoList.length; i++) {
+                str +=
+                `
+                <div class="taskList">
+                    <p>${toDoList[i]}</p>
+                    <button onclick="updeJob(${i})">Sua</button>
+                    <button onclick="deleJob(${i})">Xoa</button><br>
+                </div>
+                `
+                document.getElementById("list").innerHTML=str;
+            }
+        }
+        renderList();
+        function addToDoList() {
+            let value = document.getElementById("taskInput").value;
+            if(value === ""){
+                console.log(`du lieu khong duoc de trong`);
+                return;
+            }
+            toDoList.push(value);
+            localStorage.setItem("list", JSON.stringify(toDoList))
+            renderList();
+        }
+        document.getElementById("addTaskButton").addEventListener("click", ()=>{
+            addToDoList();
+        });
+        function deleJob(index) {        
+            let deleConfirm=confirm("Bạn có muốn xóa công việc này ko")
+            if (deleConfirm) {
+                toDoList.splice(index,1);
+                localStorage.setItem("list", JSON.stringify(toDoList));
+                renderList();
+                return
+            }
+        }
+        function updeJob(index) {
+            let nameNew = prompt(`Công việc ban đầu: ${toDoList[index]}`);
+            if (nameNew == null || nameNew.trim() === "") {
+                return;
+            }
+            toDoList[index] = nameNew; 
+            localStorage.setItem("list", JSON.stringify(toDoList));
+            renderList();
+        }
+    </script>
+</body>
+</html>
