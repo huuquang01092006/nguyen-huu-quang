@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./bai5.css" />
+  </head>
+  <body>
+    <body>
+    <h2>🗂️ Quản lý công việc (Task Board)</h2>
+
+    <div class="task-input">
+        <input type="text" id="taskName" placeholder="Nhập tên công việc..." />
+        <button>Thêm</button>
+    </div>
+
+    <div class="board">
+        <div class="column" id="pendingCol">
+            <h3>🕐 Chờ xử lý</h3>
+            <div id="pendingTasks">
+                <!-- <div class="task">
+                    <p>Nội dung</p>
+                    <button>Chuyển tiếp</button>
+                </div> -->
+            </div>
+        </div>
+        <div class="column" id="inProgressCol">
+            <h3>🔨 Đang làm</h3>
+            <div id="inProgressTasks"></div>
+        </div>
+        <div class="column" id="doneCol">
+            <h3>✅ Hoàn thành</h3>
+            <div id="doneTasks">
+                <!-- <div class="task">
+                    <p>Nội dung</p>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <script>
+        const taskInput = document.getElementById("taskName");
+        const pendingTasks = document.getElementById("pendingTasks");
+        const inProgressTasks = document.getElementById("inProgressTasks");
+        const doneTasks = document.getElementById("doneTasks");
+        const addButton = document.querySelector(".task-input button");
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || []; 
+
+        function saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function renderTasks() {
+            pendingTasks.innerHTML = "";
+            inProgressTasks.innerHTML = "";
+            doneTasks.innerHTML = "";
+
+            tasks.forEach((task, index) => {
+                const taskDiv = document.createElement("div");
+                taskDiv.classList.add("task");
+                taskDiv.innerHTML = `
+                    <p>${task.name}</p>
+                    ${task.status !== "done" ? `<button>Chuyển tiếp</button>` : ""}
+                `;
+
+                if (task.status !== "done") {
+                    const moveButton = taskDiv.querySelector("button");
+                    moveButton.addEventListener("click", () => {
+                        if (task.status === "pending") {
+                            task.status = "inProgress";
+                        } else if (task.status === "inProgress") {
+                            task.status = "done";
+                        }
+                        saveTasks(); 
+                        renderTasks(); 
+                    });
+                }
+
+                if (task.status === "pending") {
+                    pendingTasks.appendChild(taskDiv);
+                } else if (task.status === "inProgress") {
+                    inProgressTasks.appendChild(taskDiv);
+                } else if (task.status === "done") {
+                    doneTasks.appendChild(taskDiv);
+                }
+            });
+        }
+        addButton.addEventListener("click", () => {
+            const taskName = taskInput.value.trim();
+            if (taskName === "") {
+                alert("Tên công việc không được để trống!");
+                return;
+            }
+
+            const newTask = { name: taskName, status: "pending" };
+            tasks.push(newTask);
+            saveTasks();
+            renderTasks(); 
+            taskInput.value = ""; 
+        });
+
+        renderTasks();
+    </script>
+
+</body>
+
+</html>
+  </body>
+</html>

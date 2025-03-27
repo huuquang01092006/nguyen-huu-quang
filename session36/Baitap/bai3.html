@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .red{
+            border: none;
+            color: white;
+            border-radius: 4px;
+            background-color: red;
+            width: 50px;
+            height: 30px;
+        }
+        .blue{
+            border: none;
+            color: white;
+            border-radius: 4px;
+            background-color: #3498db;
+            width: 50px;
+            height: 30px;
+        }
+        .yellow{
+            border: none;
+            border-radius: 4px;
+            background-color: #f1c40f;
+            width: 50px;
+            height: 30px;
+        }
+        .violet{
+            border: none;
+            color: white;
+            border-radius: 4px;
+            background-color: #9b59b6;
+            width: 50px;
+            height: 30px;
+        }
+        .container{
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container" id="container">
+        <h2>Chon mau nen ban yeu thich</h2>
+        <button class="red" id="red" onclick="changeColor(`red`)">Do</button>
+        <button class="blue" id="blue" onclick="changeColor(`blue`)">Xanh</button>
+        <button class="yellow" id="yellow" onclick="changeColor(`yellow`)">Vang</button>
+        <button class="violet" id="violet" onclick="changeColor(`violet`)">Tim</button>
+        <p>Trang se ghi nho mau ban da chon ke ca khi tai lai</p>
+    </div>
+    <script> 
+    let savedColor = localStorage.getItem("color");
+    if (savedColor) {
+        document.getElementById("container").style.background = savedColor;
+    }
+
+    function changeColor(color) {
+        document.getElementById("container").style.background = color;
+        localStorage.setItem("color", color);
+    }
+    </script>
+
+</body>
+</html>

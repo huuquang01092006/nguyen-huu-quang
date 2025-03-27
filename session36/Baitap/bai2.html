@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            display: flex;
+            
+        }
+        .container img{
+            width: 100px;
+            margin-top: 20px;
+        }
+        .container .right{
+            margin-left: 40px;
+        }
+        .button{
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Ban thich mon an nao nhat?</h2>
+    <div id="container">
+
+    </div>
+    
+    <script>
+        let listFood=JSON.parse(localStorage.getItem("listFood"));
+        function renderFood() {
+            let str="";
+            for (let i = 0; i < listFood.length; i++) {
+                str +=
+                `
+                <div class="container">
+                    <div class="left">
+                        <img src="${listFood[i].img}" alt="">
+                    </div>
+                    <div class="right">
+                        <h6>${listFood[i].name}</h6>
+                        <p>❤️ ${listFood[i].like} luot thich</p>
+                        <button class="button" onclick="showLike(${i})">Thich +1</button>
+                    </div>
+                </div>
+                `
+                document.getElementById("container").innerHTML=str;
+            }
+        }
+        renderFood();
+        function showLike(index){
+            listFood[index].like= listFood[index].like +1;
+            localStorage.setItem("listFood", JSON.stringify(listFood));
+            renderFood();
+        }
+    </script>
+</body>
+</html>
